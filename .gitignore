@@ -1,5 +1,11 @@
 node_modules/
+.output/
+dist/
 .project_id
 .github_repo
 .env
 .env.*
+
+# Local QA artifacts
+screenshots/
+scripts/_smoke_tmp.mjs
