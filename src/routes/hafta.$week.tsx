@@ -28,13 +28,13 @@ function WeekPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <div className="grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
         <div className="hidden lg:block">
           <div className="sticky top-24">
             <WeekRail current={n} />
           </div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="lg:hidden">
             <WeekRail current={n} />
           </div>

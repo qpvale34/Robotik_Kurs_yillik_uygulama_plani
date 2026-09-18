@@ -5,23 +5,22 @@ on:
     branches:
       - main
     paths:
-      - "**/*.{ts,tsx,js,jsx,json,css,html,md,svg}"
-      - "package.json"
-      - "package-lock.json"
-      - "vite.config.ts"
-      - "tsconfig.json"
+      - "public/**"
+      - "src/**"
       - "scripts/**"
+      - "*.json"
+      - "*.ts"
+      - "*.js"
+      - "*.css"
+      - "*.html"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
-  url: ${{ steps.deployment.outputs.page_url }}
 
 jobs:
   build:
@@ -42,24 +41,10 @@ jobs:
         run: npm ci
 
       - name: Build
-        # `with-app-env.mjs` sets GROK_PROJECT_ID etc.; GH_BASE forces the
-        # project-site sub-path so Vite emits `dist/` as a static SPA.
+        # GH_BASE forces the project-site sub-path so Vite emits correct asset URLs.
         run: GH_BASE=/$(basename $GITHUB_REPOSITORY)/ npm run build
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy
-        id: deployment
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -14,7 +14,10 @@ import {
 } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
 import { FlowTimeline } from "@/components/flow-timeline";
+import { LessonInfographic } from "@/components/lesson-infographic";
 import { Button } from "@/components/ui/button";
+import { getLessonNarrative } from "@/data/lesson-narrative";
+import { getLessonImageSrc } from "@/data/lesson-image";
 import type { LessonHour } from "@/data/types";
 import { useProgress } from "@/store/progress";
 import { cn } from "@/lib/utils";
@@ -29,7 +32,7 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-lg bg-paper p-4 shadow-[var(--shadow-card)] sm:p-5">
+    <section className="min-w-0 rounded-lg bg-paper p-4 shadow-[var(--shadow-card)] sm:p-5">
       <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight">
         <Icon className="size-4 text-accent" strokeWidth={1.75} />
         {title}
@@ -43,7 +46,7 @@ function Bullets({ items }: { items: string[] }) {
   return (
     <ul className="grid gap-1.5">
       {items.map((item) => (
-        <li key={item} className="flex gap-2 text-sm leading-snug">
+        <li key={item} className="flex min-w-0 gap-2 break-words text-sm leading-snug">
           <span className="mt-2 size-1 shrink-0 rounded-full bg-accent" />
           <span>{item}</span>
         </li>
@@ -59,10 +62,18 @@ export function HourPanel({ week, hour }: { week: number; hour: LessonHour }) {
   const setNote = useProgress((s) => s.setNote);
   const [tab, setTab] = useState<"akis" | "yap">("akis");
   const flowSum = hour.flow.reduce((a, s) => a + s.min, 0);
+  const narrative = getLessonNarrative(hour);
+  const lessonImageSrc = getLessonImageSrc(week, hour.hour);
 
   return (
     <article className="grid gap-4">
       <header className="rounded-lg bg-paper p-4 shadow-[var(--shadow-card)] sm:p-6">
+        <img
+          src={lessonImageSrc}
+          alt={`${hour.title} için açıklamalı ders görseli`}
+          className="mb-5 aspect-video w-full rounded-md object-cover"
+          loading="lazy"
+        />
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
           {hour.hour}. ders saati · {flowSum} dakika
         </p>
@@ -80,6 +91,18 @@ export function HourPanel({ week, hour }: { week: number; hour: LessonHour }) {
           </Button>
         </div>
       </header>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,.9fr)]">
+        <section className="rounded-lg border border-accent/25 bg-accent-soft/60 p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">{narrative.eyebrow}</p>
+          <p className="mt-2 text-sm leading-relaxed text-ink">{narrative.story}</p>
+          <p className="mt-3 border-t border-accent/20 pt-3 text-sm leading-relaxed text-muted">
+            <span className="font-medium text-ink">Öğretmen anlatım önerisi: </span>
+            {narrative.teacherVoice}
+          </p>
+        </section>
+        <LessonInfographic hour={hour} />
+      </div>
 
       <Section icon={ListChecks} title="Kazanımlar">
         <ol className="grid gap-2">
@@ -160,7 +183,7 @@ export function HourPanel({ week, hour }: { week: number; hour: LessonHour }) {
         <Section icon={Wrench} title={hour.wiring.title}>
           <ol className="grid gap-2">
             {hour.wiring.items.map((w, i) => (
-              <li key={w} className="rounded-sm bg-sunken px-3 py-2 font-mono text-[13px] leading-relaxed">
+              <li key={w} className="min-w-0 break-words rounded-sm bg-sunken px-3 py-2 font-mono text-[13px] leading-relaxed">
                 <span className="mr-2 text-accent">{i + 1}.</span>
                 {w}
               </li>

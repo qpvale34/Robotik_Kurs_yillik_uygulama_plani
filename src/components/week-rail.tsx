@@ -7,9 +7,9 @@ export function WeekRail({ current }: { current?: number }) {
   const done = useProgress((s) => s.done);
 
   return (
-    <nav aria-label="Haftalar" className="no-print">
+    <nav aria-label="Haftalar" className="no-print min-w-0">
       <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.16em] text-faint">36 hafta</p>
-      <ol className="grid grid-cols-8 gap-1 sm:grid-cols-12 lg:grid-cols-6 xl:grid-cols-8">
+      <ol className="grid w-full min-w-0 grid-cols-8 gap-1 sm:grid-cols-12 lg:grid-cols-6 xl:grid-cols-8">
         {OUTLINE.map((w) => {
           const a = done[`${w.week}-1`];
           const b = done[`${w.week}-2`];
