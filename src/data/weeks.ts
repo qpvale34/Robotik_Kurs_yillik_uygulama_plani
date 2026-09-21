@@ -2,10 +2,11 @@ import type { WeekPlan } from "./types";
 import { WEEKS_01_08 } from "./weeks-01-08";
 import { WEEKS_09_16 } from "./weeks-09-16";
 import { WEEKS_17_26 } from "./weeks-17-26";
+import { WEEKS_27_36 } from "./weeks-27-36";
 import { WEEK_DATES } from "./calendar";
 
 export const ALL_WEEKS: WeekPlan[] =
-  [...WEEKS_01_08, ...WEEKS_09_16, ...WEEKS_17_26].sort((a, b) => a.week - b.week);
+  [...WEEKS_01_08, ...WEEKS_09_16, ...WEEKS_17_26, ...WEEKS_27_36].sort((a, b) => a.week - b.week);
 
 export function getWeek(n: number): WeekPlan | undefined {
   return ALL_WEEKS.find((w) => w.week === n);

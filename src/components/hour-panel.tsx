@@ -68,12 +68,14 @@ export function HourPanel({ week, hour }: { week: number; hour: LessonHour }) {
   return (
     <article className="grid gap-4">
       <header className="rounded-lg bg-paper p-4 shadow-[var(--shadow-card)] sm:p-6">
-        <img
-          src={lessonImageSrc}
-          alt={`${hour.title} için açıklamalı ders görseli`}
-          className="mb-5 aspect-video w-full rounded-md object-cover"
-          loading="lazy"
-        />
+        {lessonImageSrc ? (
+          <img
+            src={lessonImageSrc}
+            alt={`${hour.title} için açıklamalı ders görseli`}
+            className="mb-5 aspect-video w-full rounded-md object-cover"
+            loading="lazy"
+          />
+        ) : null}
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
           {hour.hour}. ders saati · {flowSum} dakika
         </p>

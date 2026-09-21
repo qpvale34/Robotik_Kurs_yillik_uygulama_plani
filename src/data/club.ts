@@ -163,26 +163,31 @@ export const RUBRIC = [
 ];
 
 export const BOM: BomItem[] = [
-  { item: "Arduino Uno R3 (veya uyumlu)", qtyPerTeam: "1", teamsOf8: "10", note: "2 yedek", phase: "Hafta 7+" },
-  { item: "USB A–B kablo", qtyPerTeam: "1", teamsOf8: "10", note: "Veri kablosu olsun (şarj-only değil)", phase: "Hafta 7+" },
+  { item: "DENEYAP Kart v2 (Type-C) veya Arduino Uno R3", qtyPerTeam: "1", teamsOf8: "10", note: "8 aktif + 2 yedek", phase: "Hafta 7+" },
+  { item: "USB Type-C veri kablosu (DENEYAP) veya USB A–B (Uno)", qtyPerTeam: "1", teamsOf8: "10", note: "Şarj-only kablo kabul edilmez", phase: "Hafta 7+" },
   { item: "Breadboard 830 delik", qtyPerTeam: "1", teamsOf8: "10", note: "Güç rayı renkli olanlar tercih", phase: "Hafta 5+" },
   { item: "Jumper (E-E, E-D, D-D) karışık", qtyPerTeam: "40", teamsOf8: "400", note: "Kırmızı/siyah ayrı paket", phase: "Hafta 5+" },
-  { item: "LED 5 mm (K, Y, M) + RGB", qtyPerTeam: "8+1", teamsOf8: "80+10", note: "Kutupları öğretmek için bol", phase: "Hafta 5+" },
+  { item: "LED 5 mm (kırmızı + yeşil + sarı) + RGB", qtyPerTeam: "10+1", teamsOf8: "100+10", note: "Başlangıç seviyesi deneme için bol stok", phase: "Hafta 5+" },
   { item: "Direnç 220 Ω", qtyPerTeam: "10", teamsOf8: "100", note: "LED koruma", phase: "Hafta 5+" },
   { item: "Direnç 10 kΩ", qtyPerTeam: "6", teamsOf8: "50", note: "Buton pull-down, LDR bölücü", phase: "Hafta 9+" },
-  { item: "Direnç 1 kΩ / 4.7 kΩ yedek", qtyPerTeam: "4", teamsOf8: "40", note: "Ohm deneyi", phase: "Hafta 5+" },
+  { item: "Direnç 1 kΩ / 4.7 kΩ yedek", qtyPerTeam: "6", teamsOf8: "60", note: "Ohm deneyi ve sensör eşik ayarı", phase: "Hafta 5+" },
   { item: "Tactile buton 6×6 mm", qtyPerTeam: "4", teamsOf8: "40", note: "4 bacaklı", phase: "Hafta 9+" },
   { item: "Potansiyometre 10 kΩ", qtyPerTeam: "1", teamsOf8: "10", note: "Breadboard uyumlu", phase: "Hafta 10+" },
   { item: "LDR (GL5528 veya eşdeğer)", qtyPerTeam: "1", teamsOf8: "12", note: "2 yedek", phase: "Hafta 11+" },
   { item: "Aktif buzzer 5 V", qtyPerTeam: "1", teamsOf8: "10", note: "Pasif buzzer ayrıca 4 adet (tone için)", phase: "Hafta 12+" },
+  { item: "DHT11 sıcaklık-nem sensörü", qtyPerTeam: "1", teamsOf8: "10", note: "Hackathon veri toplama projeleri için", phase: "Hafta 27+" },
+  { item: "PIR hareket sensörü (HC-SR501)", qtyPerTeam: "1", teamsOf8: "10", note: "Sergi etkileşim ve güvenlik senaryoları", phase: "Hafta 27+" },
   { item: "HC-SR04 ultrasonik", qtyPerTeam: "1", teamsOf8: "10", note: "5 V lojik", phase: "Hafta 17+" },
-  { item: "IR çizgi sensörü (2 veya 3’lü modul)", qtyPerTeam: "1", teamsOf8: "10", note: "Dijital çıkışlı", phase: "Hafta 21+" },
+  { item: "IR çizgi sensörü (2 veya 3’lü modül / DENEYAP Çift Kanallı)", qtyPerTeam: "1", teamsOf8: "10", note: "Dijital çıkışlı", phase: "Hafta 21+" },
   { item: "SG90 servo", qtyPerTeam: "1", teamsOf8: "10", note: "Harici 5 V önerilir", phase: "Hafta 19+" },
   { item: "DC motor + tekerlek çifti", qtyPerTeam: "2 motor", teamsOf8: "16 motor", note: "Redüktörlü 3–6 V", phase: "Hafta 19+" },
-  { item: "L298N (veya L293D kalkan)", qtyPerTeam: "1", teamsOf8: "10", note: "L298N 12 V’ye kadar; 6 V pille de çalışır", phase: "Hafta 20+" },
-  { item: "2WD şase kiti + top teker", qtyPerTeam: "1", teamsOf8: "8", note: "Vida seti dahil", phase: "Hafta 23+" },
-  { item: "Pil yuvası 4–6×AA + pil", qtyPerTeam: "1", teamsOf8: "10", note: "Alkali; şarjlı NiMH de olur", phase: "Hafta 23+" },
+  { item: "L298N veya DENEYAP Çift Kanallı Motor Sürücü", qtyPerTeam: "1", teamsOf8: "10", note: "Kart uyumluluğuna göre seç", phase: "Hafta 20+" },
+  { item: "REX 4WD veya 2WD şase kiti", qtyPerTeam: "1", teamsOf8: "8 + 2 yedek", note: "Sınıf seti farklı olabilir, vida seti şart", phase: "Hafta 23+" },
+  { item: "18650 pil + korumalı pil yuvası", qtyPerTeam: "2", teamsOf8: "20", note: "Şişmiş pil kesin kullanılmaz", phase: "Hafta 23+" },
+  { item: "4'lü 18650 şarj cihazı", qtyPerTeam: "paylaşım", teamsOf8: "2", note: "Sadece öğretmen gözetiminde şarj", phase: "Hafta 23+" },
+  { item: "Pil yuvası 4–6×AA + pil (alternatif güç)", qtyPerTeam: "1", teamsOf8: "10", note: "Li-ion yerine güvenli yedek senaryo", phase: "Hafta 23+" },
   { item: "Multimetre", qtyPerTeam: "paylaşım", teamsOf8: "4", note: "İstasyon", phase: "Hafta 5+" },
+  { item: "Dupont konnektör + lehimsiz kablo onarım seti", qtyPerTeam: "paylaşım", teamsOf8: "2 set", note: "Sergi haftası hızlı onarım için", phase: "Hafta 29+" },
   { item: "Bilgisayar + tarayıcı (Tinkercad)", qtyPerTeam: "1", teamsOf8: "8+", note: "Öğretmen hesabı ile sınıf", phase: "Tüm yıl" },
   { item: "Karton, bant, maket bıçağı (öğretmen)", qtyPerTeam: "—", teamsOf8: "sınıf seti", note: "Akıllı ev maketi", phase: "Hafta 13+" },
 ];
@@ -226,4 +231,4 @@ export const SEMESTER_META = [
 ];
 
 export const PLATFORM_NOTE =
-  "Kulüpteki sete göre (yalnız Arduino, LEGO SPIKE, mBot veya VEX) haftalık dağılım modüler uyarlanır. Her ders saatinin sonunda üç platform notu vardır. Ana iz: Arduino + Tinkercad + mBlock/Arduino IDE. SPIKE ve mBot aynı algoritmayı kendi bloklarıyla yapar; elektronik haftalarında SPIKE grupları mekanizma + sensör kalibrasyonuna kayar.";
+  "Kulüpteki sete göre (DENEYAP veya Arduino, ayrıca LEGO SPIKE, mBot, VEX) haftalık dağılım modüler uyarlanır. Her ders saatinin sonunda üç platform notu vardır. Ana iz: DENEYAP/Arduino + Tinkercad + mBlock/Arduino IDE. SPIKE ve mBot aynı algoritmayı kendi bloklarıyla yapar; elektronik haftalarında SPIKE grupları mekanizma + sensör kalibrasyonuna kayar.";
