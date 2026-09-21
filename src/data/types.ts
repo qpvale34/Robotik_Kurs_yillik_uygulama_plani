@@ -81,4 +81,9 @@ export type BomItem = {
   teamsOf8: string;
   note: string;
   phase: string;
+  category?: string;
+  unitPrice?: number;
+  totalPrice?: number;
+  storeUrl?: string;
+  whyNeeded?: string;
 };

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Clock, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, FileSpreadsheet, ShoppingCart, Users } from "lucide-react";
 import { WeekRail } from "@/components/week-rail";
 import { AIMS, CLUB, METHODS, PEDAGOGY, PLATFORM_NOTE, SEMESTER_META } from "@/data/club";
 import { currentWeekNumber } from "@/data/calendar";
@@ -118,6 +118,27 @@ function Home() {
             </span>
             <ArrowRight className="size-4 text-faint" />
           </Link>
+          <a
+            href={`${import.meta.env.BASE_URL}yillik-plan/Robotik_Kodlama_Kursu_Yillik_Plan_2026-2027.xlsx`}
+            download="Robotik_Kodlama_Kursu_Yillik_Plan_2026-2027.xlsx"
+            className="flex items-center justify-between rounded-lg bg-paper px-5 py-4 text-sm shadow-[var(--shadow-card)] hover:bg-sunken"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <FileSpreadsheet className="size-4 text-accent" />
+              Yıllık plan (Excel)
+            </span>
+            <ArrowRight className="size-4 text-faint" />
+          </a>
+          <a
+            href={`${import.meta.env.BASE_URL}malzemeler/index.html`}
+            className="flex items-center justify-between rounded-lg bg-paper px-5 py-4 text-sm shadow-[var(--shadow-card)] hover:bg-sunken"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <ShoppingCart className="size-4 text-accent" />
+              Malzeme listesi ve sepet
+            </span>
+            <ArrowRight className="size-4 text-faint" />
+          </a>
         </aside>
       </div>
 
