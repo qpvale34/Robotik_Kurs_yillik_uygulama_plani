@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malzeme Listesi — Robotik Kodlama Kursu 2026–2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f14;
+    --surface:#141a22;
+    --surface-2:#1b232e;
+    --fg:#e8edf2;
+    --muted:#94a3b3;
+    --border:#263140;
+    --primary:#14b8a6;
+    --primary-soft:rgba(20,184,166,.12);
+    --accent:#f59e0b;
+    --accent-soft:rgba(245,158,11,.12);
+    --danger:#ef4444;
+    --radius:14px;
+    --radius-sm:9px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--fg);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  button:not(:disabled),[role="button"]:not(:disabled),a{cursor:pointer}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* Header */
+  header{border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(20,184,166,.07),transparent)}
+  .head{padding:34px 0 26px}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);background:var(--primary-soft);border:1px solid rgba(20,184,166,.3);padding:5px 12px;border-radius:999px}
+  h1{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.02em;margin:14px 0 6px}
+  .sub{color:var(--muted);font-size:15px;max-width:640px}
+  .sub b{color:var(--fg);font-weight:600}
+
+  /* Sticky summary bar */
+  .bar{position:sticky;top:0;z-index:40;background:rgba(11,15,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .bar-in{display:flex;align-items:center;gap:14px;padding:10px 0;flex-wrap:wrap}
+  .bar-total{font-size:14px;color:var(--muted)}
+  .bar-total b{color:var(--fg);font-size:17px;font-weight:700;margin-left:4px}
+  .bar-shop{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-size:12px;font-weight:600;border:1px solid var(--border);border-radius:999px;padding:4px 11px;color:var(--muted);background:var(--surface)}
+  .chip b{color:var(--fg)}
+  .chip.deneyap{border-color:rgba(20,184,166,.4);background:var(--primary-soft)}
+  .chip.robotistan{border-color:rgba(245,158,11,.4);background:var(--accent-soft)}
+  .bar-cart-btn{margin-left:auto;display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#04211d;border:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:var(--radius-sm);transition:transform .15s ease,filter .15s ease}
+  .bar-cart-btn:hover{filter:brightness(1.08)}
+  .bar-cart-btn:active{transform:scale(.97)}
+  .bar-cart-btn .count{background:#04211d;color:var(--primary);border-radius:999px;font-size:12px;font-weight:800;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;padding:0 7px}
+
+  /* Sections */
+  section{padding:34px 0 6px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h2{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .sec-note{color:var(--muted);font-size:13px}
+  .sec-link{margin-left:auto;font-size:13px;font-weight:600;color:var(--primary);border-bottom:1px dashed rgba(20,184,166,.5);padding-bottom:1px}
+  .sec-link.amber{color:var(--accent);border-bottom-color:rgba(245,158,11,.5)}
+  .sec-desc{color:var(--muted);font-size:14px;margin-bottom:18px;max-width:720px}
+
+  /* Product grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color .18s ease,transform .18s ease}
+  .card:hover{border-color:#3a4a5e;transform:translateY(-2px)}
+  .card-top{display:flex;align-items:flex-start;gap:10px}
+  .badge{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .badge.deneyap{color:var(--primary);background:var(--primary-soft);border:1px solid rgba(20,184,166,.35)}
+  .badge.robotistan{color:var(--accent);background:var(--accent-soft);border:1px solid rgba(245,158,11,.35)}
+  .qty-need{margin-left:auto;font-size:11px;font-weight:700;color:var(--muted);border:1px dashed var(--border);border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .pname{font-size:15px;font-weight:700;line-height:1.35}
+  .pnote{font-size:12.5px;color:var(--muted)}
+  .purl{font-size:11px;color:#5c7188;word-break:break-all;display:block}
+  .purl:hover{color:var(--primary)}
+  .card-foot{margin-top:auto;display:flex;align-items:center;gap:10px}
+  .price{font-size:18px;font-weight:800;letter-spacing:-.01em}
+  .price small{font-size:11px;font-weight:500;color:var(--muted);display:block;letter-spacing:0}
+  .qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;background:var(--surface-2)}
+  .qty button{background:transparent;border:none;color:var(--fg);font-size:16px;font-weight:700;width:32px;height:36px;transition:background .15s}
+  .qty button:hover{background:var(--border)}
+  .qty span{min-width:28px;text-align:center;font-size:14px;font-weight:700}
+  .add{margin-left:auto;background:var(--primary);color:#04211d;border:none;font-weight:700;font-size:13px;padding:9px 16px;border-radius:var(--radius-sm);transition:filter .15s,transform .1s}
+  .add:hover{filter:brightness(1.08)}
+  .add:active{transform:scale(.96)}
+  .add.in-cart{background:var(--surface-2);color:var(--primary);border:1px solid rgba(20,184,166,.4)}
+
+  /* Cart panel */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:50}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .panel{position:fixed;top:0;right:0;height:100dvh;width:min(430px,100%);background:var(--surface);border-left:1px solid var(--border);z-index:60;transform:translateX(102%);transition:transform .25s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  .panel.open{transform:translateX(0)}
+  .panel-head{display:flex;align-items:center;gap:10px;padding:18px 18px 14px;border-bottom:1px solid var(--border)}
+  .panel-head h3{font-size:16px;font-weight:800}
+  .close{margin-left:auto;background:var(--surface-2);border:1px solid var(--border);color:var(--fg);width:34px;height:34px;border-radius:9px;font-size:16px;font-weight:700;transition:background .15s}
+  .close:hover{background:var(--border)}
+  .panel-body{flex:1;overflow-y:auto;padding:14px 18px}
+  .empty{text-align:center;color:var(--muted);font-size:14px;padding:48px 12px}
+  .empty .big{font-size:38px;opacity:.35;margin-bottom:10px}
+  .crow{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+  .crow-info{flex:1;min-width:0}
+  .crow-name{font-size:13.5px;font-weight:600;line-height:1.35}
+  .crow-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .crow-meta .badge{font-size:9px;padding:2px 6px;margin-right:6px}
+  .crow-right{text-align:right;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .crow-price{font-size:13.5px;font-weight:700}
+  .crow-qty{display:flex;align-items:center;gap:2px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2)}
+  .crow-qty button{background:transparent;border:none;color:var(--fg);width:26px;height:26px;font-weight:800;font-size:14px}
+  .crow-qty button:hover{background:var(--border)}
+  .crow-qty span{min-width:22px;text-align:center;font-size:12.5px;font-weight:700}
+  .rm{background:transparent;border:none;color:var(--muted);font-size:11px;text-decoration:underline;padding:0}
+  .rm:hover{color:var(--danger)}
+  .panel-foot{border-top:1px solid var(--border);padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px}
+  .sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted)}
+  .sum-row b{color:var(--fg)}
+  .sum-row.total{font-size:16px;color:var(--fg);padding-top:6px;border-top:1px dashed var(--border)}
+  .sum-row.total b{color:var(--primary);font-size:19px}
+  .panel-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .btn{border:1px solid var(--border);background:var(--surface-2);color:var(--fg);font-weight:600;font-size:13px;padding:10px 12px;border-radius:var(--radius-sm);text-align:center;transition:background .15s}
+  .btn:hover{background:var(--border)}
+  .btn.primary{background:var(--primary);color:#04211d;border-color:transparent;font-weight:700}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost-danger{color:#fca5a5}
+  .copied{font-size:12px;color:var(--primary);text-align:center;min-height:16px}
+
+  footer{border-top:1px solid var(--border);margin-top:40px;padding:22px 0 34px;color:var(--muted);font-size:12.5px}
+  footer a{color:var(--primary)}
+
+  @media (max-width:640px){
+    .bar-in{gap:8px}
+    .bar-cart-btn{margin-left:auto;padding:9px 14px}
+    .grid{grid-template-columns:1fr}
+    .card-foot{flex-wrap:wrap}
+    .add{margin-left:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head">
+    <span class="kicker">AHMET ZİYLAN ANADOLU İMAM HATİP LİSESİ · 2026–2027</span>
+    <h1>Robotik Kodlama Kursu — Malzeme Alım Listesi</h1>
+    <p class="sub">Kurs planındaki deneylerde kullanılacak malzemeler. <b>DENEYAP Mağaza</b> ve <b>Robotistan</b> olmak üzere iki kaynaktan; ürün kartlarından adet seçip <b>sepete</b> ekleyin, sağ üstten sepeti açıp mağaza bazlı toplamları görün.</p>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap bar-in">
+    <span class="bar-total">Sepet toplamı:<b id="barTotal">0,00 ₺</b></span>
+    <span class="bar-shop">
+      <span class="chip deneyap">DENEYAP <b id="barDeneyap">0,00 ₺</b></span>
+      <span class="chip robotistan">Robotistan <b id="barRobotistan">0,00 ₺</b></span>
+    </span>
+    <button class="bar-cart-btn" id="openCart">🛒 Sepet <span class="count" id="barCount">0</span></button>
+  </div>
+</div>
+
+<main class="wrap">
+  <section id="deneyap">
+    <div class="sec-head">
+      <h2>DENEYAP Mağaza</h2>
+      <span class="sec-note">magaza.deneyapkart.org · resmî mağaza</span>
+      <a class="sec-link" href="https://magaza.deneyapkart.org/" target="_blank" rel="noopener">Mağazayı aç ↗</a>
+    </div>
+    <p class="sec-desc">Kart ve kart ailesi modülleri — resmî fiyatlar. DENEYAP Mağaza'da olmayan yan malzemeler aşağıdaki Robotistan bölümünde.</p>
+    <div class="grid" id="gridDeneyap"></div>
+  </section>
+
+  <section id="robotistan">
+    <div class="sec-head">
+      <h2>Robotistan</h2>
+      <span class="sec-note">robotistan.com · yan malzemeler &amp; sensörler</span>
+      <a class="sec-link amber" href="https://www.robotistan.com/" target="_blank" rel="noopener">Mağazayı aç ↗</a>
+    </div>
+    <p class="sec-desc">DENEYAP Mağaza'da bulunmayan temel devre elemanları, sensörler, motorlar ve güç malzemeleri.</p>
+    <div class="grid" id="gridRobotistan"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Not:</b> Fiyatlar Eylül 2026 itibarıyla mağaza sayfalarından derlenmiştir; KDV dahil güncel fiyat için ürün linkini kullanın. Stok durumu satıcı sayfasında belirtilir. Kurs planı: <a href="/yillik-plan/Robotik_Kodlama_Kursu_Yillik_Plan_2026-2027.xlsx">Yıllık Plan (Excel)</a></p>
+  </div>
+</footer>
+
+<!-- Cart -->
+<div class="overlay" id="overlay"></div>
+<aside class="panel" id="panel" aria-label="Sepet">
+  <div class="panel-head">
+    <h3>Sepet</h3>
+    <button class="close" id="closeCart" aria-label="Kapat">✕</button>
+  </div>
+  <div class="panel-body" id="cartBody"></div>
+  <div class="panel-foot">
+    <div class="sum-row"><span>DENEYAP Mağaza</span><b id="sumDeneyap">0,00 ₺</b></div>
+    <div class="sum-row"><span>Robotistan</span><b id="sumRobotistan">0,00 ₺</b></div>
+    <div class="sum-row total"><span>Genel toplam</span><b id="sumTotal">0,00 ₺</b></div>
+    <div class="copied" id="copied"></div>
+    <div class="panel-actions">
+      <button class="btn" id="copyList">Listeyi Kopyala</button>
+      <button class="btn ghost-danger" id="clearCart">Sepeti Temizle</button>
+    </div>
+    <div class="panel-actions">
+      <a class="btn primary" href="https://magaza.deneyapkart.org/" target="_blank" rel="noopener">DENEYAP Mağaza ↗</a>
+      <a class="btn primary" href="https://www.robotistan.com/" target="_blank" rel="noopener">Robotistan ↗</a>
+    </div>
+  </div>
+</aside>
+
+<script>
+"use strict";
+
+// ------------------- Veri -------------------
+const DENEYAP_STORE = "deneyap", ROBOTISTAN_STORE = "robotistan";
+
+const PRODUCTS = [
+  // ---- DENEYAP Mağaza (magaza.deneyapkart.org) ----
+  { id:"dk1a", store:DENEYAP_STORE, name:"DENEYAP Kart 1A", price:628.00,
+    note:"Ana geliştirme kartı — ESP32-WROVER-E, Wi-Fi + BT, kursun tüm deneylerinde kullanılır.",
+    url:"https://magaza.deneyapkart.org/tr/product/detail/deneyap-kart-1a", need:"Öğrenci başına 1" },
+  { id:"dk1av2", store:DENEYAP_STORE, name:"DENEYAP Kart 1A v2 (Type-C)", price:591.00,
+    note:"Güncel Type-C bağlantılı 1A varyantı — tercih edilebilir alternatif.",
+    url:"https://magaza.deneyapkart.org/", need:"Öğrenci başına 1" },
+  { id:"dkmini", store:DENEYAP_STORE, name:"DENEYAP Mini", price:337.00,
+    note:"Kompakt kart — küçük boyutlu prototip projeleri için.",
+    url:"https://magaza.deneyapkart.org/", need:"İsteğe bağlı" },
+  { id:"dkenv", store:DENEYAP_STORE, name:"DENEYAP Sıcaklık, Nem ve Basınç Algılayıcı", price:280.00,
+    note:"Çevre ölçümü deneyleri (sıcaklık/nem/basınç) için I2C modül.",
+    url:"https://magaza.deneyapkart.org/", need:"Grup başına 1" },
+  { id:"dkimu", store:DENEYAP_STORE, name:"DENEYAP 6 Eksen Atalet Ölçüm Birimi (IMU)", price:213.00,
+    note:"İvme + dönü ölçümü — denge robotu ve hareket deneyleri.",
+    url:"https://magaza.deneyapkart.org/", need:"Grup başına 1" },
+  { id:"dkalg", store:DENEYAP_STORE, name:"DENEYAP Hareket, Işık, Renk Algılayıcı ve Mesafe Ölçer", price:193.00,
+    note:"Hareket/ışık/renk algılama ve mesafe ölçümü — çoklu sensör deneyi.",
+    url:"https://magaza.deneyapkart.org/tr/product/detail/deneyap-hareket-isk-renk-alglayc-ve-mesafe-olcer", need:"Grup başına 1" },
+  { id:"dkset", store:DENEYAP_STORE, name:"DENEYAP Elektronik Geliştirme Seti", price:1448.00,
+    note:"Modüllerin çoğunu içinde barındıran set — bütçe uygunsa parça parça almaya alternatif.",
+    url:"https://magaza.deneyapkart.org/", need:"İsteğe bağlı (set)" },
+
+  // ---- Robotistan (robotistan.com) ----
+  { id:"uno", store:ROBOTISTAN_STORE, name:"Arduino Tabanlı UNO R3 Geliştirme Kartı (CH340)", price:250.91,
+    note:"USB kablo hediyeli UNO R3 uyumlu kart — Arduino tarafındaki deneyler için.",
+    url:"https://www.robotistan.com/arduino-uno-r3-klon-usb-kablo-hediyeli-usb-chip-ch340", need:"Öğrenci başına 1" },
+  { id:"hcsr04", store:ROBOTISTAN_STORE, name:"HC-SR04 Ultrasonik Mesafe Sensörü", price:75.33,
+    note:"Mesafe ölçümü, park sensörü ve engel algılama projeleri.",
+    url:"https://www.robotistan.com/hc-sr04-ultrasonik-mesafe-sensoru", need:"Öğrenci başına 1" },
+  { id:"sg90_180", store:ROBOTISTAN_STORE, name:"SG90 Servo Motor — 180°", price:83.04,
+    note:"Kol/kapı/pan-tilt gibi açı kontrollü mekanik projeler.",
+    url:"https://www.robotistan.com/tower-pro-sg90-rc-mini-servo-motor", need:"Öğrenci başına 1–2" },
+  { id:"sg90_360", store:ROBOTISTAN_STORE, name:"SG90 Servo Motor — 360° (sürekli dönüş)", price:92.53,
+    note:"Tekerlek sürüşü ve sürekli dönüş gerektiren robot gövdesi.",
+    url:"https://www.robotistan.com/servo-sg90-360-derece", need:"Robot başına 2" },
+  { id:"l298n", store:ROBOTISTAN_STORE, name:"L298N Voltaj Regülatörlü Çift Motor Sürücü (Kırmızı)", price:284.61,
+    note:"DC motorlu robot aracı sürüşü — çift kanal, 2A.",
+    url:"https://www.robotistan.com/l298n-voltaj-regulatorlu-cift-motor-surucu-karti", need:"Robot başına 1" },
+  { id:"l298n_g", store:ROBOTISTAN_STORE, name:"L298N Çift Motor Sürücü (Yeşil PCB)", price:196.33,
+    note:"Daha ekonomik L298N alternatifi.",
+    url:"https://www.robotistan.com/l298-cift-motor-surucu-karti-dual-motor-driver-yesil-pcb", need:"Robot başına 1" },
+  { id:"oled", store:ROBOTISTAN_STORE, name:"0.96 inç I2C OLED Ekran (SSD1306)", price:182.69,
+    note:"Ekranda veri gösterimi (saat, sensör değerleri, menü) deneyleri.",
+    url:"https://www.robotistan.com/096-inch-i2c-oled-ekran-ssd1306", need:"Öğrenci başına 1" },
+  { id:"bb830", store:ROBOTISTAN_STORE, name:"Büyük Boy Breadboard (830 nokta)", price:60.98,
+    note:"Lehimsiz devre kurulumu — tüm temel deneylerin zemini.",
+    url:"https://www.robotistan.com/breadboard", need:"Öğrenci başına 1" },
+  { id:"jmp140", store:ROBOTISTAN_STORE, name:"140 Parça Kutulu Jumper Kablo Kiti", price:89.52,
+    note:"Breadboard bağlantıları için kutulu kablo seti.",
+    url:"https://www.robotistan.com/140-parca-kutulu-jumper-kablo-kiti-140-piece-jumper-wire-kit", need:"Öğrenci başına 1" },
+  { id:"jmp65", store:ROBOTISTAN_STORE, name:"Jumper Kablo E-E / M-M 65'li Karışık Paket", price:68.17,
+    note:"Ek bağlantı kablosu — uzun ömürlü yedek set.",
+    url:"https://robotistan.com/jumper-kablo-e-e-m-m-65li-karisik-paket", need:"Grup başına 1" },
+  { id:"ldr5", store:ROBOTISTAN_STORE, name:"5 mm LDR Işık Sensörü (Fotodirenç)", price:6.49,
+    note:"Işık şiddeti algılama; LDR ile LED kontrol deneyi.",
+    url:"https://www.robotistan.com/5mm-ldr", need:"Öğrenci başına 2–3" },
+  { id:"ldr10", store:ROBOTISTAN_STORE, name:"10 mm LDR Işık Sensörü", price:28.83,
+    note:"Daha geniş yüzeyli LDR — çizgi/ışık izleme projeleri.",
+    url:"https://www.robotistan.com/10mm-ldr-1", need:"Grup başına 2" },
+  { id:"r220", store:ROBOTISTAN_STORE, name:"1/4 W 220 Ω Direnç Paketi (10 adet)", price:2.40,
+    note:"LED akım sınırlama direnci.",
+    url:"https://www.robotistan.com/14w-220r-direnc-paketi-10-adet", need:"Öğrenci başına 1 paket" },
+  { id:"r10k", store:ROBOTISTAN_STORE, name:"1/4 W 10K Ω Direnç Paketi (10 adet)", price:2.40,
+    note:"LDR gerilim bölücü ve pull-down bağlantıları.",
+    url:"https://www.robotistan.com/14w-10k-direnc-paketi-10-adet", need:"Öğrenci başına 1 paket" },
+  { id:"pilk", store:ROBOTISTAN_STORE, name:"9V Pil Bağlantı Klipsi (T Tip)", price:5.60,
+    note:"9V pille taşınabilir besleme deneyleri.",
+    url:"https://www.robotistan.com/konnektor", need:"Öğrenci başına 1" },
+];
+
+// ------------------- Yardımcılar -------------------
+const fmt = n => n.toLocaleString("tr-TR",{minimumFractionDigits:2, maximumFractionDigits:2}) + " ₺";
+const $ = id => document.getElementById(id);
+const STORE_LABEL = { [DENEYAP_STORE]:"DENEYAP", [ROBOTISTAN_STORE]:"Robotistan" };
+const STORE_HREF = { [DENEYAP_STORE]:"https://magaza.deneyapkart.org/", [ROBOTISTAN_STORE]:"https://www.robotistan.com/" };
+
+// ------------------- Sepet durumu -------------------
+const CART_KEY = "malzeme-sepeti-v1";
+let cart = {};
+try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "{}"); } catch { cart = {}; }
+const save = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+const byId = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+const cartEntries = () => Object.entries(cart).filter(([id,q]) => byId[id] && q > 0).map(([id,q]) => ({ p:byId[id], q }));
+const lineTotal = e => e.p.price * e.q;
+const storeTotal = s => cartEntries().filter(e => e.p.store === s).reduce((t,e) => t + lineTotal(e), 0);
+const totalCount = () => cartEntries().reduce((t,e) => t + e.q, 0);
+const grandTotal = () => cartEntries().reduce((t,e) => t + lineTotal(e), 0);
+
+function setQty(id, q){
+  if(q <= 0) delete cart[id]; else cart[id] = q;
+  save(); renderCart(); renderCards(); renderBar();
+}
+
+// ------------------- Ürün kartları -------------------
+function cardHTML(p){
+  const inCart = (cart[p.id] || 0) > 0;
+  return `
+  <article class="card" data-id="${p.id}">
+    <div class="card-top">
+      <span class="badge ${p.store}">${STORE_LABEL[p.store]}</span>
+      <span class="qty-need">${p.need}</span>
+    </div>
+    <div class="pname">${p.name}</div>
+    <div class="pnote">${p.note}</div>
+    <a class="purl" href="${p.url}" target="_blank" rel="noopener">${p.url.replace(/^https?:\/\//,"")}</a>
+    <div class="card-foot">
+      <div class="price">${fmt(p.price)}<small>KDV dahil · güncel fiyat satıcı sayfasında</small></div>
+      <div class="qty">
+        <button data-act="minus" aria-label="Azalt">−</button>
+        <span class="q">${cart[p.id] || 1}</span>
+        <button data-act="plus" aria-label="Artır">+</button>
+      </div>
+      <button class="add ${inCart ? "in-cart" : ""}" data-act="add">${inCart ? "Sepette ✓ Ekle +" : "Sepete Ekle"}</button>
+    </div>
+  </article>`;
+}
+
+function renderCards(){
+  $("gridDeneyap").innerHTML = PRODUCTS.filter(p => p.store === DENEYAP_STORE).map(cardHTML).join("");
+  $("gridRobotistan").innerHTML = PRODUCTS.filter(p => p.store === ROBOTISTAN_STORE).map(cardHTML).join("");
+}
+
+// Kart etkileşimi (event delegation)
+document.addEventListener("click", e => {
+  const btn = e.target.closest("[data-act]");
+  if(!btn) return;
+  const card = btn.closest(".card");
+  if(!card) return;
+  const id = card.dataset.id, p = byId[id];
+  const qEl = card.querySelector(".q");
+  let q = parseInt(qEl.textContent, 10) || 1;
+  if(btn.dataset.act === "plus") q = Math.min(99, q + 1);
+  if(btn.dataset.act === "minus") q = Math.max(1, q - 1);
+  if(btn.dataset.act === "add"){ setQty(id, (cart[id] || 0) + q); q = cart[id] || 1; }
+  qEl.textContent = q;
+  if(btn.dataset.act === "add"){
+    btn.classList.add("in-cart");
+    btn.textContent = "Sepette ✓ Ekle +";
+    openCart();
+  }
+});
+
+// ------------------- Sepet paneli -------------------
+function crowHTML(e){
+  return `
+  <div class="crow" data-id="${e.p.id}">
+    <div class="crow-info">
+      <div class="crow-name">${e.p.name}</div>
+      <div class="crow-meta"><span class="badge ${e.p.store}">${STORE_LABEL[e.p.store]}</span> ${fmt(e.p.price)} × ${e.q}</div>
+      <button class="rm" data-rm>Sepetten çıkar</button>
+    </div>
+    <div class="crow-right">
+      <span class="crow-price">${fmt(lineTotal(e))}</span>
+      <div class="crow-qty">
+        <button data-cq="-1" aria-label="Azalt">−</button>
+        <span>${e.q}</span>
+        <button data-cq="1" aria-label="Artır">+</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderCart(){
+  const entries = cartEntries();
+  $("cartBody").innerHTML = entries.length
+    ? entries.map(crowHTML).join("")
+    : `<div class="empty"><div class="big">🛒</div>Sepet boş.<br>Ürün kartlarından adet seçip ekleyin.</div>`;
+  $("sumDeneyap").textContent = fmt(storeTotal(DENEYAP_STORE));
+  $("sumRobotistan").textContent = fmt(storeTotal(ROBOTISTAN_STORE));
+  $("sumTotal").textContent = fmt(grandTotal());
+}
+
+$("cartBody").addEventListener("click", e => {
+  const row = e.target.closest(".crow");
+  if(!row) return;
+  const id = row.dataset.id;
+  if(e.target.hasAttribute("data-rm")){ setQty(id, 0); return; }
+  const cq = e.target.closest("[data-cq]");
+  if(cq){ setQty(id, (cart[id] || 0) + parseInt(cq.dataset.cq, 10)); }
+});
+
+// ------------------- Üst bar + panel aç/kapa -------------------
+function renderBar(){
+  $("barTotal").textContent = fmt(grandTotal());
+  $("barDeneyap").textContent = fmt(storeTotal(DENEYAP_STORE));
+  $("barRobotistan").textContent = fmt(storeTotal(ROBOTISTAN_STORE));
+  $("barCount").textContent = totalCount();
+}
+
+const openCart = () => { $("panel").classList.add("open"); $("overlay").classList.add("open"); };
+const closeCart = () => { $("panel").classList.remove("open"); $("overlay").classList.remove("open"); };
+$("openCart").addEventListener("click", openCart);
+$("closeCart").addEventListener("click", closeCart);
+$("overlay").addEventListener("click", closeCart);
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeCart(); });
+
+// ------------------- Kopyala / temizle -------------------
+$("copyList").addEventListener("click", async () => {
+  const entries = cartEntries();
+  if(!entries.length){ $("copied").textContent = "Sepet boş."; return; }
+  const lines = ["Robotik Kodlama Kursu 2026-2027 — Malzeme Sipariş Listesi", ""];
+  for(const s of [DENEYAP_STORE, ROBOTISTAN_STORE]){
+    const sub = entries.filter(e => e.p.store === s);
+    if(!sub.length) continue;
+    lines.push(`== ${STORE_LABEL[s]} ==`);
+    sub.forEach(e => lines.push(`• ${e.q} x ${e.p.name} — ${fmt(lineTotal(e))}`));
+    lines.push(`Ara toplam: ${fmt(storeTotal(s))}`, "");
+  }
+  lines.push(`GENEL TOPLAM: ${fmt(grandTotal())}`);
+  try {
+    await navigator.clipboard.writeText(lines.join("\n"));
+    $("copied").textContent = "Liste panoya kopyalandı ✓";
+  } catch {
+    $("copied").textContent = "Kopyalanamadı — tarayıcı izni gerekli.";
+  }
+  setTimeout(() => $("copied").textContent = "", 2500);
+});
+
+$("clearCart").addEventListener("click", () => {
+  if(!Object.keys(cart).length) return;
+  if(confirm("Sepetteki tüm ürünler kaldırılsın mı?")){
+    cart = {}; save(); renderCart(); renderCards(); renderBar();
+  }
+});
+
+// ------------------- Başlat -------------------
+renderCards(); renderCart(); renderBar();
+</script>
+</body>
+</html>
